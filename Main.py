@@ -1,4 +1,7 @@
 from ExcelReader import ExcelReader
+from ExcelReaderFrontEnd import ExcelReaderFrontEnd
 
 reader = ExcelReader("test data.xlsx")
-print(reader.read_data())
+reader.read_data()  
+app = ExcelReaderFrontEnd(reader.raw_data)
+app.root.mainloop() 
