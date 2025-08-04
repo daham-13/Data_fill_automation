@@ -548,7 +548,7 @@ class ExcelReaderFrontEnd:
         self.action_btn = ctk.CTkButton(
             button_frame,
             text="✏️ Edit Data",
-            command=self.toggle_edit,
+            command=self.controller.toggle_edit,
             corner_radius=25,
             font=ctk.CTkFont(family="Arial", size=16, weight="bold"),
             width=200,
@@ -595,30 +595,5 @@ class ExcelReaderFrontEnd:
             else:
                 entry.configure(state="normal" if editable else "disabled")
 
-    def toggle_edit(self):
-        if not self.editing:
-            self.set_fields_state(editable=True)
-            self.action_btn.configure(
-                text="💾 Save Changes",
-                fg_color=self.colors['success'],
-                hover_color='#45a049'
-            )
-            self.status_label.configure(
-                text="✏️ Edit mode - Make your changes",
-                text_color=self.colors['success']
-            )
-            self.editing = True
-        else:
-            self.controller.save_changes()
-            self.set_fields_state(editable=False)
-            self.action_btn.configure(
-                text="✏️ Edit Data",
-                fg_color=self.colors['accent'],
-                hover_color=self.colors['primary']
-            )
-            self.status_label.configure(
-                text="🔒 Read-only mode",
-                text_color=self.colors['text_secondary']
-            )
-            self.editing = False
+    
 

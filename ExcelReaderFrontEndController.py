@@ -1,5 +1,5 @@
-import customtkinter as ctk
 from tkinter import messagebox, filedialog
+from BrowserAutomation import BrowserAutomation
 
 class ExcelReaderFrontEndController:
     def __init__(self, excel_reader, frontend_app):
@@ -40,24 +40,19 @@ class ExcelReaderFrontEndController:
         )
         
         if result:
-            # Clear all entries in the UI
-            for key, entry in self.entries.items():
-                if hasattr(entry, 'date_entry'):  # Custom date selector
-                    entry.date_entry.delete(0, "end")
-                elif hasattr(entry, 'set'):  # ComboBox
-                    entry.set("")
-                else:  # Regular entry
-                    entry.delete(0, "end")
-            
             # Clear raw_data in ExcelReader
             for key in self.raw_data:
                 self.raw_data[key] = ""
+
+            self.update_ui_with_data()
             
             messagebox.showinfo(
                 "✅ Cleared",
                 "All fields have been cleared successfully!",
                 parent=self.root
             )
+
+            print(self.raw_data)
 
     def select_file_button_clicked(self):
         """Handle select file button click - opens file picker and loads data"""
@@ -104,9 +99,10 @@ class ExcelReaderFrontEndController:
 
     def update_ui_with_data(self):
         """Update the UI fields with data from ExcelReader"""
+        self.frontend_app.set_fields_state(editable=True)
         for key, entry in self.entries.items():
             value = self.raw_data.get(key, "")
-            
+
             # For a custom date selector widget
             if hasattr(entry, 'date_entry'):  
                 # Make sure date_entry is a widget supporting delete/insert
@@ -134,10 +130,12 @@ class ExcelReaderFrontEndController:
                     entry.insert(0, str(value))
                 else:
                     entry.insert(0, "")  # Clear the entry
+        
+        self.frontend_app.set_fields_state(editable=False)
 
 
     def proceed_button_clicked(self):
-        """Handle proceed button click - placeholder for functionality"""
+        automation = BrowserAutomation()
         print("Proceed button clicked")
         print("Current data:", self.raw_data)
         
@@ -150,6 +148,8 @@ class ExcelReaderFrontEndController:
                 f"Data ready for processing:\n\n{data_summary}",
                 parent=self.root
             )
+            data = self.raw_data
+            automation.execute(data)
         else:
             messagebox.showwarning(
                 "⚠️ No Data",
@@ -173,3 +173,30 @@ class ExcelReaderFrontEndController:
             "Your changes have been saved successfully!\n\nData updated and ready to use.",
             parent=self.root
         )
+
+    def toggle_edit(self):
+        if not self.editing:
+            self.frontend_app.set_fields_state(editable=True)
+            self.frontend_app.action_btn.configure(
+                text="💾 Save Changes",
+                fg_color=self.frontend_app.colors['success'],
+                hover_color='#45a049'
+            )
+            self.frontend_app.status_label.configure(
+                text="✏️ Edit mode - Make your changes",
+                text_color=self.frontend_app.colors['success']
+            )
+            self.frontend_app.editing = True
+        else:
+            self.save_changes()
+            self.frontend_app.set_fields_state(editable=False)
+            self.frontend_app.action_btn.configure(
+                text="✏️ Edit Data",
+                fg_color=self.frontend_app.colors['accent'],
+                hover_color=self.frontend_app.colors['primary']
+            )
+            self.frontend_app.status_label.configure(
+                text="🔒 Read-only mode",
+                text_color=self.frontend_app.colors['text_secondary']
+            )
+            self.frontend_app.editing = False
