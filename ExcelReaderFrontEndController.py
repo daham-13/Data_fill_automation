@@ -135,27 +135,34 @@ class ExcelReaderFrontEndController:
 
 
     def proceed_button_clicked(self):
-        automation = BrowserAutomation()
-        print("Proceed button clicked")
-        print("Current data:", self.raw_data)
-        
-        # Show current data in a message box
-        data_summary = "\n".join([f"{key}: {value}" for key, value in self.raw_data.items() if value])
-        
-        if data_summary:
-            messagebox.showinfo(
-                "📋 Current Data",
-                f"Data ready for processing:\n\n{data_summary}",
-                parent=self.root
-            )
-            data = self.raw_data
-            automation.execute(data)
+        if self.editing:
+            messagebox.showerror(
+                    "❌ Error",
+                    f"Unable to Proceed in Editing Mode Please Save the data and proceed",
+                    parent=self.root
+                )
         else:
-            messagebox.showwarning(
-                "⚠️ No Data",
-                "No data available to process. Please load a file or enter data manually.",
-                parent=self.root
-            )
+            automation = BrowserAutomation()
+            print("Proceed button clicked")
+            print("Current data:", self.raw_data)
+            
+            # Show current data in a message box
+            data_summary = "\n".join([f"{key}: {value}" for key, value in self.raw_data.items() if value])
+            
+            if data_summary:
+                messagebox.showinfo(
+                    "📋 Current Data",
+                    f"Data ready for processing:\n\n{data_summary}",
+                    parent=self.root
+                )
+                data = self.raw_data
+                automation.execute(data)
+            else:
+                messagebox.showwarning(
+                    "⚠️ No Data",
+                    "No data available to process. Please load a file or enter data manually.",
+                    parent=self.root
+                )
 
     def save_changes(self):
         """Save changes from UI back to ExcelReader"""

@@ -594,6 +594,3 @@ class ExcelReaderFrontEnd:
                 entry.cal_button.configure(state="normal" if editable else "disabled")
             else:
                 entry.configure(state="normal" if editable else "disabled")
-
-    
-

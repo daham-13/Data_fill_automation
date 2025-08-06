@@ -99,6 +99,8 @@ class BrowserAutomation:
                 EC.presence_of_element_located((By.TAG_NAME, "form"))
             )
             for field_name, value in data.items():
+                if value == '' or value == []:
+                    continue
                 if field_name in ['sex', 'marital']:
                     select_element = Select(self.driver.find_element(By.NAME, field_name))
                     select_element.select_by_value(value)
