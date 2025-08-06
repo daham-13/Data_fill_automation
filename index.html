@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Application Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2c5aa0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #2c5aa0;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus {
+            border-color: #2c5aa0;
+            outline: none;
+            box-shadow: 0 0 5px rgba(44, 90, 160, 0.3);
+        }
+        
+        button {
+            background-color: #2c5aa0;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        
+        button:hover {
+            background-color: #1e3f73;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .step-indicator {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            display: inline-block;
+            padding: 5px 15px;
+            margin: 0 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .step.active {
+            background-color: #2c5aa0;
+            color: white;
+        }
+        
+        .step.inactive {
+            background-color: #ddd;
+            color: #666;
+        }
+        
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .col {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>🛂 Visa Application Portal</h1>
+        
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <span class="step active" id="step1">Step 1: Basic Info</span>
+            <span class="step inactive" id="step2">Step 2: Application Details</span>
+        </div>
+        
+        <!-- FIRST FORM: Initial Selection -->
+        <form id="initialForm">
+            <h2>Application Setup</h2>
+            
+            <div class="form-group">
+                <label for="user_type">Who are you?</label>
+                <select name="user_type" id="user_type" required>
+                    <option value="">Please select...</option>
+                    <option value="i am a person">I am a person</option>
+                    <option value="i am an agency">I am an agency</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="num_applicants">How many applicants?</label>
+                <select name="num_applicants" id="num_applicants" required>
+                    <option value="">Please select...</option>
+                    <option value="1">1 applicant</option>
+                    <option value="2">2 applicants</option>
+                    <option value="3">3 applicants</option>
+                    <option value="4">4 applicants</option>
+                    <option value="5">5 applicants</option>
+                </select>
+            </div>
+            
+            <button type="button" onclick="proceedToMainForm()">Proceed to Application</button>
+        </form>
+        
+        <!-- SECOND FORM: Visa Application Details (Initially Hidden) -->
+        <form id="visaForm" class="hidden" action="/submit" method="post">
+            <h2>Visa Application Details</h2>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="surname">Surname *</label>
+                        <input type="text" name="surname" id="surname" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="other_name">Other Name *</label>
+                        <input type="text" name="other_name" id="other_name" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="dob">Date of Birth *</label>
+                        <input type="date" name="dob" id="dob" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="sex">Gender *</label>
+                        <select name="sex" id="sex" required>
+                            <option value="">Select...</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="P_num">Passport Number *</label>
+                        <input type="text" name="P_num" id="P_num" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="P_exp">Passport Expiry *</label>
+                        <input type="date" name="P_exp" id="P_exp" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nationality">Nationality *</label>
+                        <input type="text" name="nationality" id="nationality" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="marital">Marital Status</label>
+                        <select name="marital" id="marital">
+                            <option value="">Select...</option>
+                            <option value="Not Maried">Single</option>
+                            <option value="Married">Married</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" name="email" id="email" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nic">NIC Number</label>
+                        <input type="text" name="nic" id="nic">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="phone1">Phone 1 *</label>
+                        <input type="tel" name="phone1" id="phone1" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="phone2">Phone 2</label>
+                        <input type="tel" name="phone2" id="phone2">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="pob">Place of Birth</label>
+                        <input type="text" name="pob" id="pob">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="cob">Country of Birth</label>
+                        <input type="text" name="cob" id="cob">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Address *</label>
+                <input type="text" name="address" id="address" required>
+            </div>
+            
+            <h3>Delegate Information (if applicable)</h3>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="d_name">Delegate Name</label>
+                        <input type="text" name="d_name" id="d_name">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="d_passport">Delegate Passport</label>
+                        <input type="text" name="d_passport" id="d_passport">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="dnic">Delegate NIC</label>
+                <input type="text" name="dnic" id="dnic">
+            </div>
+            
+            <button type="button" onclick="goBack()">← Back</button>
+            <button type="submit" style="margin-left: 10px;">Submit Application</button>
+        </form>
+    </div>
+    
+    <script>
+        function proceedToMainForm() {
+            // Get values from first form
+            const userType = document.getElementById('user_type').value;
+            const numApplicants = document.getElementById('num_applicants').value;
+            
+            // Validate selections
+            if (!userType || !numApplicants) {
+                alert('Please make both selections before proceeding.');
+                return;
+            }
+            
+            // Hide initial form
+            document.getElementById('initialForm').classList.add('hidden');
+            
+            // Show visa form
+            document.getElementById('visaForm').classList.remove('hidden');
+            
+            // Update step indicator
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step1').classList.add('inactive');
+            document.getElementById('step2').classList.remove('inactive');
+            document.getElementById('step2').classList.add('active');
+            
+            // Store initial form data (in a real app, you'd send this to server)
+            console.log('User Type:', userType);
+            console.log('Number of Applicants:', numApplicants);
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function goBack() {
+            // Show initial form
+            document.getElementById('initialForm').classList.remove('hidden');
+            
+            // Hide visa form
+            document.getElementById('visaForm').classList.add('hidden');
+            
+            // Update step indicator
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step2').classList.add('inactive');
+            document.getElementById('step1').classList.remove('inactive');
+            document.getElementById('step1').classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Handle form submission
+        document.getElementById('visaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Form submitted successfully! (This is a demo - no actual submission)');
+            console.log('Form data:', new FormData(this));
+        });
+    </script>
+</body>
+</html>
