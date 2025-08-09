@@ -41,8 +41,6 @@ class ExcelReaderFrontEnd:
         self.editing = False
         self.date_popup = None
         
-        # Create the controller and pass references
-        from ExcelReaderFrontEndController import ExcelReaderFrontEndController
         self.controller = ExcelReaderFrontEndController(self.excel_reader, self)
 
         self.create_widgets()

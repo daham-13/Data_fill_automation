@@ -156,7 +156,7 @@ class ExcelReaderFrontEndController:
                     parent=self.root
                 )
                 data = self.raw_data
-                automation.execute(data)
+                automation.execute_full_flow(data)
             else:
                 messagebox.showwarning(
                     "⚠️ No Data",
