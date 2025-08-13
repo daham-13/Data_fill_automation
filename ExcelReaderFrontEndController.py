@@ -23,7 +23,6 @@ class ExcelReaderFrontEndController:
         return self.frontend_app.entries
 
     def clear_button_clicked(self):
-        """Handle clear button click - clears all form fields"""
         if self.editing:
             messagebox.showwarning(
                 "⚠️ Warning",
@@ -142,7 +141,7 @@ class ExcelReaderFrontEndController:
                     parent=self.root
                 )
         else:
-            automation = BrowserAutomation()
+            automation = BrowserAutomation(raw_data=self.raw_data)
             print("Proceed button clicked")
             print("Current data:", self.raw_data)
             
@@ -156,7 +155,7 @@ class ExcelReaderFrontEndController:
                     parent=self.root
                 )
                 data = self.raw_data
-                automation.execute_full_flow(data)
+                automation.run()
             else:
                 messagebox.showwarning(
                     "⚠️ No Data",
